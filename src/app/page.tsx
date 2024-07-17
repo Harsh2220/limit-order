@@ -17,7 +17,7 @@ import getJupTokens from "@/utils/getJupTokens";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { setTokens } = useTokenStore();
+  const { setTokens, sellToken, buyToken } = useTokenStore();
 
   async function storeTokens() {
     try {
@@ -60,7 +60,17 @@ export default function Home() {
           </form>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Create</Button>
+          <Button
+            disabled={!sellToken && !buyToken}
+            className="w-full"
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `http://localhost:3000/api/actions/create?sellToken=${sellToken?.name}&buyToken=${buyToken?.name}&sellTokenAddress=${sellToken?.address}&buyTokenAddress=${buyToken?.address}`
+              );
+            }}
+          >
+            Copy Blink
+          </Button>
         </CardFooter>
       </Card>
     </main>
