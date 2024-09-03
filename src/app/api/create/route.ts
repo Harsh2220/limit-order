@@ -1,56 +1,41 @@
-/**
- * Solana Actions Example
- */
-
+import createOrder from "@/utils/createOrder";
+import getTokenInfo from "@/utils/getTokenInfo";
+import getTokenPrice from "@/utils/getTokenPrice";
 import {
     ACTIONS_CORS_HEADERS,
     ActionGetResponse,
-    ActionPostRequest,
-    ActionPostResponse,
-    createPostResponse,
+    ActionPostRequest
 } from "@solana/actions";
 import {
-    Authorized,
-    Connection,
-    Keypair,
-    LAMPORTS_PER_SOL,
-    PublicKey,
-    StakeProgram,
-    Transaction,
-    clusterApiUrl
+    PublicKey
 } from "@solana/web3.js";
-
-export const DEFAULT_VALIDATOR_VOTE_PUBKEY: PublicKey = new PublicKey(
-    "5ZWgXcyqrrNpQHCme5SdC5hCeYb2o3fEJhF7Gok3bTVN",
-);
-
-export const DEFAULT_STAKE_AMOUNT: number = 1.0;
 
 export const GET = async (req: Request) => {
     try {
         const requestUrl = new URL(req.url);
-        const sellToken = requestUrl.searchParams.get("sellToken")
-        const buyToken = requestUrl.searchParams.get("buyToken")
         const sellTokenAddress = requestUrl.searchParams.get("sellTokenAddress")
         const buyTokenAddress = requestUrl.searchParams.get("buyTokenAddress")
 
-        console.log(sellToken, buyToken, sellTokenAddress, buyTokenAddress)
+        console.log(sellTokenAddress, buyTokenAddress)
 
-        const baseHref = new URL(
-            `/api/actions/create?sellToken=${sellToken}&buyToken=${buyToken}&sellTokenAddress=${sellTokenAddress}&buyTokenAddress=${buyTokenAddress}`,
-            requestUrl.origin,
-        ).toString();
+        if (!sellTokenAddress || !buyTokenAddress) {
+            return Response.json("Data not provided", {
+                headers: ACTIONS_CORS_HEADERS,
+            });
+        }
+
+        const [sellTokenInfo, buyTokenInfo] = await Promise.all([getTokenInfo(sellTokenAddress), getTokenInfo(buyTokenAddress)])
 
         const payload: ActionGetResponse = {
-            title: `Sell ${sellToken} & Buy ${buyToken}`,
+            title: `Sell ${sellTokenInfo.result.symbol} & Buy ${buyTokenInfo.result.symbol}`,
             icon: "https://cryptonary.com/cdn-cgi/image/width=2048/https://cryptonary.s3.eu-west-2.amazonaws.com/wp-content/uploads/2024/05/CryptoSchool0516_Limit-Orders_Jup.jpg",
             description: `Stake your SOL to the validator to secure the Solana network`,
             label: "Stake your SOL", // this value will be ignored since `links.actions` exists
             links: {
                 actions: [
                     {
-                        label: "Stake SOL", // button text
-                        href: `${baseHref}&amount={amount}&rate={rate}`, // this href will have a text input
+                        label: "Create Limit Order", // button text
+                        href: `${requestUrl.href}&amount={amount}&rate={rate}`, // this href will have a text input
                         parameters: [
                             {
                                 name: "amount", // parameter name in the `href` above
@@ -82,8 +67,6 @@ export const GET = async (req: Request) => {
     }
 };
 
-// DO NOT FORGET TO INCLUDE THE `OPTIONS` HTTP METHOD
-// THIS WILL ENSURE CORS WORKS FOR BLINKS
 export const OPTIONS = GET;
 
 export const POST = async (req: Request) => {
@@ -92,8 +75,13 @@ export const POST = async (req: Request) => {
 
         const body: ActionPostRequest = await req.json();
 
-        // validate the client provided input
+        const sellTokenAddress = requestUrl.searchParams.get("sellTokenAddress")
+        const buyTokenAddress = requestUrl.searchParams.get("buyTokenAddress")
+        const amount = requestUrl.searchParams.get("amount")
+        const rate = requestUrl.searchParams.get("rate")
+
         let account: PublicKey;
+
         try {
             account = new PublicKey(body.account);
         } catch (err) {
@@ -103,47 +91,27 @@ export const POST = async (req: Request) => {
             });
         }
 
-        const connection = new Connection(
-            process.env.SOLANA_RPC! || clusterApiUrl("devnet"),
-        );
+        if (!sellTokenAddress || !buyTokenAddress || !amount || !rate) {
+            return Response.json("Data not provided", {
+                headers: ACTIONS_CORS_HEADERS,
+            });
+        }
 
-        const minStake = await connection.getStakeMinimumDelegation();
+        const [buyTokenPrice, sellTokenInfo] = await Promise.all([getTokenPrice(buyTokenAddress), getTokenInfo(sellTokenAddress)])
 
-        const stakeKeypair = Keypair.generate();
+        const inAmount = Math.pow(10, parseInt(sellTokenInfo.result.decimals))
+        const ss = buyTokenPrice / Number(rate);
+        const outAmount = (Number(parseInt(amount) * inAmount) * Number(ss)) / buyTokenPrice;
 
-        const transaction = new Transaction().add(
-            StakeProgram.createAccount({
-                stakePubkey: stakeKeypair.publicKey,
-                authorized: new Authorized(account, account),
-                fromPubkey: account,
-                lamports: 1 * LAMPORTS_PER_SOL,
-                // note: if you want to time lock the stake account for any time period, this is how
-                // lockup: new Lockup(0, 0, account),
-            }),
-            StakeProgram.delegate({
-                stakePubkey: stakeKeypair.publicKey,
-                authorizedPubkey: account,
-                votePubkey: new PublicKey(""),
-            }),
-        );
+        const transaction = await createOrder({
+            inAmount: inAmount,
+            outAmount: outAmount,
+            inputMint: sellTokenAddress,
+            outputMint: buyTokenAddress,
+            owner: account,
+        })
 
-        // set the end user as the fee payer
-        transaction.feePayer = account;
-
-        transaction.recentBlockhash = (
-            await connection.getLatestBlockhash()
-        ).blockhash;
-
-        const payload: ActionPostResponse = await createPostResponse({
-            fields: {
-                transaction,
-                message: `Stake SOL to validator`,
-            },
-            // note: creating a new stake account requires the account's keypair to sign
-            signers: [stakeKeypair],
-        });
-
-        return Response.json(payload, {
+        return Response.json(transaction, {
             headers: ACTIONS_CORS_HEADERS,
         });
     } catch (err) {

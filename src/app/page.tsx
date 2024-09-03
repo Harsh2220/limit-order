@@ -21,8 +21,8 @@ export default function Home() {
 
   async function storeTokens() {
     try {
-      const tokens = await getJupTokens();
-      setTokens(tokens);
+      const data = await getJupTokens();
+      setTokens(data);
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +65,7 @@ export default function Home() {
             className="w-full"
             onClick={() => {
               navigator.clipboard.writeText(
-                `http://localhost:3000/api/actions/create?sellToken=${sellToken?.name}&buyToken=${buyToken?.name}&sellTokenAddress=${sellToken?.address}&buyTokenAddress=${buyToken?.address}`
+                `http://localhost:3000/api/create?sellTokenAddress=${sellToken?.address}&buyTokenAddress=${buyToken?.address}`
               );
             }}
           >

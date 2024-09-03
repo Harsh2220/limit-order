@@ -1,9 +1,9 @@
-import { Keypair } from '@solana/web3.js';
+import { Keypair, PublicKey } from '@solana/web3.js';
 
 type createOrderParams = {
-    owner: string,
-    inAmount: string,
-    outAmount: string,
+    owner: PublicKey,
+    inAmount: number,
+    outAmount: number,
     inputMint: string,
     outputMint: string,
 }
@@ -23,7 +23,6 @@ export default async function createOrder(params: createOrderParams) {
                 outputMint: params.outputMint,
                 expiredAt: null,
                 base: Keypair.generate(),
-                referralAccount: "",
             })
         })
     ).json();
