@@ -77,6 +77,7 @@ function BuyTokenModal() {
             {filteredTokens &&
               filteredTokens.map((token) => (
                 <div
+                  key={token.address}
                   className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-lg cursor-pointer"
                   onClick={() => {
                     setBuyToken(token);

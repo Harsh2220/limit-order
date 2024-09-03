@@ -30,7 +30,7 @@ export default function Home() {
 
   useEffect(() => {
     storeTokens();
-  }, []);
+  });
 
   return (
     <main className="min-h-screen w-full flex justify-center items-center">
