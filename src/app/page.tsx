@@ -65,7 +65,7 @@ export default function Home() {
             className="w-full"
             onClick={() => {
               navigator.clipboard.writeText(
-                `http://localhost:3000/api/create?sellTokenAddress=${sellToken?.address}&buyTokenAddress=${buyToken?.address}`
+                `${window.location.hostname}/api/create?sellTokenAddress=${sellToken?.address}&buyTokenAddress=${buyToken?.address}`
               );
             }}
           >

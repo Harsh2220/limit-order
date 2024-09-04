@@ -4,7 +4,8 @@ import getTokenPrice from "@/utils/getTokenPrice";
 import {
     ACTIONS_CORS_HEADERS,
     ActionGetResponse,
-    ActionPostRequest
+    ActionPostRequest,
+    ActionPostResponse
 } from "@solana/actions";
 import {
     PublicKey
@@ -111,7 +112,14 @@ export const POST = async (req: Request) => {
             owner: account.toString(),
         })
 
-        return Response.json(data?.tx, {
+        console.log(data)
+
+        const payload: ActionPostResponse = {
+            transaction: data?.tx,
+            message: `Limit order created`,
+        };
+
+        return Response.json(payload, {
             headers: ACTIONS_CORS_HEADERS,
         });
     } catch (err) {
