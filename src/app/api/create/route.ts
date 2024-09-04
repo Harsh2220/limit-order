@@ -29,22 +29,22 @@ export const GET = async (req: Request) => {
         const payload: ActionGetResponse = {
             title: `Sell ${sellTokenInfo.result.symbol} & Buy ${buyTokenInfo.result.symbol}`,
             icon: "https://cryptonary.com/cdn-cgi/image/width=2048/https://cryptonary.s3.eu-west-2.amazonaws.com/wp-content/uploads/2024/05/CryptoSchool0516_Limit-Orders_Jup.jpg",
-            description: `Stake your SOL to the validator to secure the Solana network`,
-            label: "Stake your SOL", // this value will be ignored since `links.actions` exists
+            description: `Create limit orders with just single click`,
+            label: "Create Limit Order",
             links: {
                 actions: [
                     {
-                        label: "Create Limit Order", // button text
-                        href: `${requestUrl.href}&amount={amount}&rate={rate}`, // this href will have a text input
+                        label: "Create Limit Order",
+                        href: `${requestUrl.href}&amount={amount}&rate={rate}`,
                         parameters: [
                             {
-                                name: "amount", // parameter name in the `href` above
-                                label: "Enter the amount", // placeholder of the text input
+                                name: "amount",
+                                label: "Enter the amount",
                                 required: true,
                             },
                             {
-                                name: "rate", // parameter name in the `href` above
-                                label: "Enter the rate", // placeholder of the text input
+                                name: "rate",
+                                label: "Enter the rate",
                                 required: true,
                             },
                         ],
@@ -103,19 +103,18 @@ export const POST = async (req: Request) => {
         const ss = buyTokenPrice / Number(rate);
         const outAmount = (Number(parseInt(amount) * inAmount) * Number(ss)) / buyTokenPrice;
 
-        const transaction = await createOrder({
+        const data = await createOrder({
             inAmount: inAmount,
             outAmount: outAmount,
             inputMint: sellTokenAddress,
             outputMint: buyTokenAddress,
-            owner: account,
+            owner: account.toString(),
         })
 
-        return Response.json(transaction, {
+        return Response.json(data?.tx, {
             headers: ACTIONS_CORS_HEADERS,
         });
     } catch (err) {
-        console.log(err);
         let message = "An unknown error occurred";
         if (typeof err == "string") message = err;
         return new Response(message, {
