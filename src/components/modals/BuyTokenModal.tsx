@@ -13,6 +13,7 @@ import { JupTokens } from "@/types/jup";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import React, { useEffect, useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
+import getShortName from "@/utils/getShortName";
 
 function BuyTokenModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +50,7 @@ function BuyTokenModal() {
             <div className="flex items-center gap-2">
               <Avatar className="w-6 h-6">
                 <AvatarImage src={buyToken.logoURI} />
-                <AvatarFallback>{buyToken.name}</AvatarFallback>
+                <AvatarFallback>{getShortName(buyToken.name)}</AvatarFallback>
               </Avatar>
               <p className="font-semibold text-sm">{buyToken.name}</p>
             </div>
@@ -86,7 +87,7 @@ function BuyTokenModal() {
                 >
                   <Avatar className="w-8 h-8">
                     <AvatarImage src={token.logoURI} />
-                    <AvatarFallback>{token.name}</AvatarFallback>
+                    <AvatarFallback>{getShortName(token.name)}</AvatarFallback>
                   </Avatar>
                   <p className="font-semibold">{token.name}</p>
                 </div>

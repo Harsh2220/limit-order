@@ -100,9 +100,9 @@ export const POST = async (req: Request) => {
 
         const [buyTokenPrice, sellTokenInfo] = await Promise.all([getTokenPrice(buyTokenAddress), getTokenInfo(sellTokenAddress)])
 
-        const inAmount = Math.pow(10, parseInt(sellTokenInfo.result.decimals))
+        const inAmount = parseInt(amount) * Math.pow(10, parseInt(sellTokenInfo.result.decimals))
         const ss = buyTokenPrice / Number(rate);
-        const outAmount = (Number(parseInt(amount) * inAmount) * Number(ss)) / buyTokenPrice;
+        const outAmount = (inAmount * ss) / buyTokenPrice;
 
         const data = await createOrder({
             inAmount: inAmount,

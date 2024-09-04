@@ -12,12 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import useTokenStore from "@/store";
 import getJupTokens from "@/utils/getJupTokens";
 import { useEffect } from "react";
 
 export default function Home() {
   const { setTokens, sellToken, buyToken } = useTokenStore();
+  const { toast } = useToast();
 
   async function storeTokens() {
     try {
@@ -61,15 +63,21 @@ export default function Home() {
         </CardContent>
         <CardFooter>
           <Button
-            disabled={!sellToken && !buyToken}
+            disabled={
+              (!sellToken && !buyToken) ||
+              sellToken?.address === buyToken?.address
+            }
             className="w-full"
             onClick={() => {
               navigator.clipboard.writeText(
-                `${window.location.hostname}/api/create?sellTokenAddress=${sellToken?.address}&buyTokenAddress=${buyToken?.address}`
+                `https://${window.location.hostname}/api/create?sellTokenAddress=${sellToken?.address}&buyTokenAddress=${buyToken?.address}`
               );
+              toast({
+                title: "Link copied",
+              });
             }}
           >
-            Copy Blink
+            Copy Link
           </Button>
         </CardFooter>
       </Card>
