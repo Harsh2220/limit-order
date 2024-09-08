@@ -47,7 +47,7 @@ function BuyTokenModal() {
           className="h-11 flex items-center justify-between rounded-3xl"
         >
           {buyToken ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Avatar className="w-7 h-7">
                 <AvatarImage src={buyToken.logoURI} />
                 <AvatarFallback>{getShortName(buyToken.name)}</AvatarFallback>

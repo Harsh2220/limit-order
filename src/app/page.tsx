@@ -54,7 +54,7 @@ export default function Home() {
         <CardHeader>
           <CardTitle className="text-2xl">Create your blink</CardTitle>
           <CardDescription>
-            Deploy your blink and share on twitter
+            Create your limit order blink with single click
           </CardDescription>
         </CardHeader>
         <CardContent>
