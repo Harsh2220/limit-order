@@ -44,15 +44,15 @@ function BuyTokenModal() {
       <DialogTrigger asChild>
         <Button
           variant={"outline"}
-          className="flex items-center justify-between"
+          className="h-11 flex items-center justify-between rounded-3xl"
         >
           {buyToken ? (
             <div className="flex items-center gap-2">
-              <Avatar className="w-6 h-6">
+              <Avatar className="w-7 h-7">
                 <AvatarImage src={buyToken.logoURI} />
                 <AvatarFallback>{getShortName(buyToken.name)}</AvatarFallback>
               </Avatar>
-              <p className="font-semibold text-sm">{buyToken.name}</p>
+              <p className="font-semibold text-md">{buyToken.name}</p>
             </div>
           ) : (
             <p>Select Token</p>

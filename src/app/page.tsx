@@ -36,9 +36,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen w-full flex justify-center items-center">
-      <Card className="w-[380px]">
+      <Card className="w-[380px] rounded-3xl shadow-xl">
         <CardHeader>
-          <CardTitle>Create your blink</CardTitle>
+          <CardTitle className="text-2xl">Create your blink</CardTitle>
           <CardDescription>
             Deploy your blink and share on twitter
           </CardDescription>
@@ -47,13 +47,13 @@ export default function Home() {
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name" className="mb-1 text-xs">
+                <Label htmlFor="name" className="mb-1 text-sm">
                   You&apos;re Selling
                 </Label>
                 <SellTokenModal />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="framework" className="mb-1 text-xs">
+                <Label htmlFor="framework" className="mb-1 text-sm">
                   You&apos;re Buying
                 </Label>
                 <BuyTokenModal />
@@ -67,7 +67,7 @@ export default function Home() {
               (!sellToken && !buyToken) ||
               sellToken?.address === buyToken?.address
             }
-            className="w-full"
+            className="w-full rounded-3xl h-11 text-md"
             onClick={() => {
               navigator.clipboard.writeText(
                 `https://${window.location.hostname}/api/create?sellTokenAddress=${sellToken?.address}&buyTokenAddress=${buyToken?.address}`
