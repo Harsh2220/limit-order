@@ -70,7 +70,7 @@ function BuyTokenModal() {
         </DialogHeader>
         <div>
           <Input
-            className=""
+            className="rounded-3xl pl-4 h-10"
             placeholder="Search tokens"
             onChange={handleInputChange}
           />
@@ -79,7 +79,7 @@ function BuyTokenModal() {
               filteredTokens.map((token) => (
                 <div
                   key={token.address}
-                  className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-lg cursor-pointer"
+                  className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-3xl cursor-pointer"
                   onClick={() => {
                     setBuyToken(token);
                     setIsOpen(false);

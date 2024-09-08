@@ -14,8 +14,8 @@ import {
 export const GET = async (req: Request) => {
     try {
         const requestUrl = new URL(req.url);
-        const sellTokenAddress = requestUrl.searchParams.get("sellTokenAddress")
-        const buyTokenAddress = requestUrl.searchParams.get("buyTokenAddress")
+        const sellTokenAddress = requestUrl.searchParams.get("sell")
+        const buyTokenAddress = requestUrl.searchParams.get("buy")
 
         console.log(sellTokenAddress, buyTokenAddress)
 
@@ -76,8 +76,8 @@ export const POST = async (req: Request) => {
 
         const body: ActionPostRequest = await req.json();
 
-        const sellTokenAddress = requestUrl.searchParams.get("sellTokenAddress")
-        const buyTokenAddress = requestUrl.searchParams.get("buyTokenAddress")
+        const sellTokenAddress = requestUrl.searchParams.get("sell")
+        const buyTokenAddress = requestUrl.searchParams.get("buy")
         const amount = requestUrl.searchParams.get("amount")
         const rate = requestUrl.searchParams.get("rate")
 
