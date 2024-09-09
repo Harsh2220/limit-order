@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   title: "QuickEdge",
   description:
     "Create your limit order blinks and place limit orders within seconds using blink.",
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌛</text></svg>",
+    shortcut:
+      "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌛</text></svg>",
+  },
 };
 
 export default function RootLayout({
