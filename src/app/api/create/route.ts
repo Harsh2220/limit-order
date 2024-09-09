@@ -30,12 +30,12 @@ export const GET = async (req: Request) => {
         const payload: ActionGetResponse = {
             title: `Sell ${sellTokenInfo.result.symbol} & Buy ${buyTokenInfo.result.symbol}`,
             icon: "https://cryptonary.com/cdn-cgi/image/width=2048/https://cryptonary.s3.eu-west-2.amazonaws.com/wp-content/uploads/2024/05/CryptoSchool0516_Limit-Orders_Jup.jpg",
-            description: `Create limit orders with just single click`,
-            label: "Create Limit Order",
+            description: `Enter details and place limit orders within seconds.`,
+            label: "Place Limit Order",
             links: {
                 actions: [
                     {
-                        label: "Create Limit Order",
+                        label: "Place Limit Order",
                         href: `${requestUrl.href}&amount={amount}&rate={rate}`,
                         parameters: [
                             {

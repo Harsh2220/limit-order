@@ -19,6 +19,9 @@ import { cn } from "@/lib/utils";
 import useTokenStore from "@/store";
 import getJupTokens from "@/utils/getJupTokens";
 import { useEffect } from "react";
+import { Handjet } from "next/font/google";
+
+const handjet = Handjet({ subsets: ["latin"] });
 
 export default function Home() {
   const { setTokens, sellToken, buyToken } = useTokenStore();
@@ -38,7 +41,7 @@ export default function Home() {
   });
 
   return (
-    <main className="min-h-screen w-full flex justify-center items-center">
+    <main className="min-h-screen w-full flex flex-col justify-center items-center">
       <DotPattern
         width={20}
         height={20}
@@ -49,6 +52,9 @@ export default function Home() {
           "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] "
         )}
       />
+      <h1 className={`text-8xl mb-10 ${handjet.className} font-semibold`}>
+        QuickEdge
+      </h1>
       <Card className="relative w-[380px] rounded-3xl shadow-none">
         <BorderBeam colorFrom="#1a1a1a" colorTo="#f5f5f5" />
         <CardHeader>
