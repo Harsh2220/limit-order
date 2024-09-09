@@ -21,7 +21,6 @@
     "@solana/web3.js": "^1.95.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "flash-sdk": "^2.4.12",
     "fs": "^0.0.1-security",
     "next": "14.2.5",
     "react": "^18",
