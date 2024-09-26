@@ -29,7 +29,7 @@ export const GET = async (req: Request) => {
 
         const payload: ActionGetResponse = {
             title: `Sell ${sellTokenInfo.result.symbol} & Buy ${buyTokenInfo.result.symbol}`,
-            icon: "https://cryptonary.com/cdn-cgi/image/width=2048/https://cryptonary.s3.eu-west-2.amazonaws.com/wp-content/uploads/2024/05/CryptoSchool0516_Limit-Orders_Jup.jpg",
+            icon: "https://cryptonary.com/cdn-cgi/image/width=1920/https://cryptonary.s3.eu-west-2.amazonaws.com/wp-content/uploads/2024/05/HOW-TO-PLACE-LIMIT-ORDERS-ON-JUPITER.jpg",
             description: `Enter details and place limit orders within seconds.`,
             label: "Place Limit Order",
             links: {
